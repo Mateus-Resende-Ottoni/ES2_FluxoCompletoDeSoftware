@@ -1,9 +1,9 @@
-package com.agenda;
+package com.clinica;
 
-import com.agenda.controller.CompromissoController;
-import com.agenda.model.Compromisso;
-import com.agenda.model.Contato;
-import com.agenda.repository.CompromissoRepository;
+import com.clinica.controller.ExameLabController;
+import com.clinica.model.ExameLab;
+import com.clinica.model.Atendimento;
+import com.clinica.repository.ExameLabRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,17 +25,17 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * TESTES UNITÁRIOS - Compromissos (DEV 2 - Bruno)
+ * TESTES UNITÁRIOS - ExameLabs
  * Usa @WebMvcTest para testar apenas o controller isoladamente
  */
-@WebMvcTest(CompromissoController.class)
-class CompromissoControllerTest {
+@WebMvcTest(ExameLabController.class)
+class ExameLabControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private CompromissoRepository repository;
+    private ExameLabRepository repository;
 
     private ObjectMapper objectMapper;
 
@@ -46,48 +46,54 @@ class CompromissoControllerTest {
     }
 
     @Test
-    void deveCriarCompromissoComSucesso() throws Exception {
-        Compromisso comp = new Compromisso();
+    void deveCriarExameLabComSucesso() throws Exception {
+        ExameLab comp = new ExameLab();
         comp.setId(1L);
-        comp.setTitulo("Reunião com cliente");
-        comp.setData(LocalDate.of(2024, 12, 15));
-        comp.setHora(LocalTime.of(14, 0));
+        comp.setDescricao("Dor de cabeça");
 
-        when(repository.save(any(Compromisso.class))).thenReturn(comp);
+        when(repository.save(any(ExameLab.class))).thenReturn(comp);
 
-        mockMvc.perform(post("/api/compromissos")
+        mockMvc.perform(post("/api/examesLab")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(comp)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.titulo").value("Reunião com cliente"));
+                .andExpect(jsonPath("$.descricao").value("Dor de cabeça"));
     }
 
     @Test
-    void deveListarCompromissosOrdenados() throws Exception {
-        Compromisso comp1 = new Compromisso();
+    void deveListarExameLabsOrdenados() throws Exception {
+        ExameLab comp1 = new ExameLab();
         comp1.setId(1L);
-        comp1.setTitulo("Reunião manhã");
-        comp1.setData(LocalDate.of(2024, 12, 15));
+        comp1.setDescricao("Dor de barriga");
 
-        Compromisso comp2 = new Compromisso();
+        ExameLab comp2 = new ExameLab();
         comp2.setId(2L);
-        comp2.setTitulo("Almoço");
-        comp2.setData(LocalDate.of(2024, 12, 15));
+        comp2.setDescricao("Desconforto na coluna");
 
-        when(repository.findAllByOrderByDataAscHoraAsc())
+        when(repository.findAllByOrderByIdAsc())
                 .thenReturn(Arrays.asList(comp1, comp2));
 
-        mockMvc.perform(get("/api/compromissos"))
+        mockMvc.perform(get("/api/examesLab"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].titulo").value("Reunião manhã"))
-                .andExpect(jsonPath("$[1].titulo").value("Almoço"));
+                .andExpect(jsonPath("$[0].descricao").value("Dor de barriga"))
+                .andExpect(jsonPath("$[1].descricao").value("Desconforto na coluna"));
     }
 
     @Test
-    void deveRetornar404ParaCompromissoInexistente() throws Exception {
+    void deveListarExamesLabVazio() throws Exception {
+        when(repository.findAllByOrderByIdAsc()).thenReturn(Arrays.asList());
+
+        mockMvc.perform(get("/api/examesLab"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$").isEmpty());
+    }
+
+    @Test
+    void deveRetornar404ParaExameLabInexistente() throws Exception {
         when(repository.findById(999L)).thenReturn(Optional.empty());
 
-        mockMvc.perform(get("/api/compromissos/999"))
+        mockMvc.perform(get("/api/examesLab/999"))
                 .andExpect(status().isNotFound());
     }
 }

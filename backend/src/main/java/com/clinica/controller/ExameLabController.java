@@ -1,7 +1,7 @@
-package com.agenda.controller;
+package com.clinica.controller;
 
-import com.agenda.model.Compromisso;
-import com.agenda.repository.CompromissoRepository;
+import com.clinica.model.ExameLab;
+import com.clinica.repository.ExameLabRepository;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,31 +10,31 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/compromissos")
+@RequestMapping("/api/examesLab")
 @CrossOrigin(origins = "*")
-public class CompromissoController {
+public class ExameLabController {
 
-    private final CompromissoRepository repository;
+    private final ExameLabRepository repository;
 
-    public CompromissoController(CompromissoRepository repository) {
+    public ExameLabController(ExameLabRepository repository) {
         this.repository = repository;
     }
 
-    // CREATE - Criar novo compromisso
+    // CREATE - Criar novo exame
     @PostMapping
-    public ResponseEntity<Compromisso> criar(@Valid @RequestBody Compromisso compromisso) {
-        Compromisso salvo = repository.save(compromisso);
+    public ResponseEntity<ExameLab> criar(@Valid @RequestBody ExameLab exame) {
+        ExameLab salvo = repository.save(exame);
         return ResponseEntity.status(HttpStatus.CREATED).body(salvo);
     }
 
-    // READ - Listar todos os compromissos
+    // READ - Listar todos os exames
     @GetMapping
-    public ResponseEntity<List<Compromisso>> listar() {
-        List<Compromisso> compromissos = repository.findAllByOrderByDataAscHoraAsc();
-        return ResponseEntity.ok(compromissos);
+    public ResponseEntity<List<ExameLab>> listar() {
+        List<ExameLab> exames = repository.findAllByOrderByDataAscHoraAsc();
+        return ResponseEntity.ok(exames);
     }
 
-    // READ - Buscar compromisso por ID
+    // READ - Buscar exame por ID
     @GetMapping("/{id}")
     public ResponseEntity<?> buscar(@PathVariable Long id) {
         return repository.findById(id)
@@ -43,29 +43,26 @@ public class CompromissoController {
                         .body(null));
     }
 
-    // UPDATE - Atualizar compromisso
+    // UPDATE - Atualizar exame
     @PutMapping("/{id}")
     public ResponseEntity<?> atualizar(@PathVariable Long id,
-                                       @Valid @RequestBody Compromisso dados) {
+                                       @Valid @RequestBody ExameLab dados) {
         return repository.findById(id)
                 .map(comp -> {
-                    comp.setTitulo(dados.getTitulo());
-                    comp.setData(dados.getData());
-                    comp.setHora(dados.getHora());
                     comp.setDescricao(dados.getDescricao());
-                    comp.setContato(dados.getContato());
+                    comp.setAtendimento(dados.getAtendimento());
                     return ResponseEntity.ok(repository.save(comp));
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // DELETE - Remover compromisso
+    // DELETE - Remover exame
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletar(@PathVariable Long id) {
         return repository.findById(id)
                 .map(comp -> {
                     repository.delete(comp);
-                    return ResponseEntity.ok(Map.of("mensagem", "Compromisso removido com sucesso"));
+                    return ResponseEntity.ok(Map.of("mensagem", "Exame removido com sucesso"));
                 })
                 .orElse(ResponseEntity.notFound().build());
     }

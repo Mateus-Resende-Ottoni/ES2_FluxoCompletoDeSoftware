@@ -9,12 +9,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockbean.MockBean;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.util.List;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -51,7 +52,9 @@ class ProfissionalDeSaudeControllerTest {
         comp.setNome("João da Silva");
         comp.setTelefone("912345678");
         comp.setEndereco("Rua Blá Blá, Bairro Dan Da Dan");
-        comp.setCategoria(["Psicologo"]);
+        List<String> categorias = new ArrayList<String>();
+        categorias.add("Psicólogo");
+        comp.setCategoria(categorias);
 
         when(repository.save(any(ProfissionalDeSaude.class))).thenReturn(comp);
 
@@ -66,13 +69,17 @@ class ProfissionalDeSaudeControllerTest {
     void deveListarProfissionalDeSaudesOrdenados() throws Exception {
         ProfissionalDeSaude comp1 = new ProfissionalDeSaude();
         comp1.setId(1L);
-        comp.setNome("Alberto");
-        comp.setCategoria(["Psicologo"]);
+        comp1.setNome("Alberto");
+        List<String> categorias1 = new ArrayList<String>();
+        categorias1.add("Psicólogo");
+        comp1.setCategoria(categorias1);
 
         ProfissionalDeSaude comp2 = new ProfissionalDeSaude();
         comp2.setId(2L);
-        comp.setNome("Beatriz");
-        comp.setCategoria(["Psicologo"]);
+        comp2.setNome("Beatriz");
+        List<String> categorias2 = new ArrayList<String>();
+        categorias2.add("Médico");
+        comp2.setCategoria(categorias2);
 
         when(repository.findAllByOrderByNomeAsc())
                 .thenReturn(Arrays.asList(comp1, comp2));

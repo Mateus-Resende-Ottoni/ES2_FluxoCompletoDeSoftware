@@ -1,6 +1,6 @@
-package com.agenda.repository;
+package com.clinica.repository;
 
-import com.agenda.model.ProfissionalDeSaude;
+import com.clinica.model.ProfissionalDeSaude;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;

@@ -2,10 +2,11 @@ package com.clinica.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import org.hibernate.annotations.Type;
+//import jakarta.validation.constraints.NotNull;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import lombok.Data;
+import java.util.List;
 
 @Entity
 @Table(name = "profissionaisDeSaude")
@@ -29,17 +30,21 @@ public class ProfissionalDeSaude {
     private String endereco;
 
     //Categoria[]
-    @Type(org.hibernate.type.StringArrayType.class)
-    @Column(columnDefinition = "text[]")
-    private String[] categoria;
+    @ElementCollection
+    @CollectionTable(
+        name = "profissional_categorias",
+        joinColumns = @JoinColumn(name = "profissional_id")
+    )
+    @Column(name = "categoria")
+    private List<String> categoria;
 
     
     //====================----------====================
-	public int getId() {
+	public Long getId() {
 		return this.id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
     //====================----------====================
@@ -79,11 +84,11 @@ public class ProfissionalDeSaude {
 
     
     //====================----------====================
-	public String[] getCategoria() {
+	public List<String> getCategoria() {
 		return this.categoria;
 	}
 
-	public void setCategoria(String[] categoria) {
+	public void setCategoria(List<String> categoria) {
 		this.categoria = categoria;
 	}
     //====================----------====================

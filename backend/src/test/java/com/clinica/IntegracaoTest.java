@@ -17,6 +17,8 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -89,45 +91,45 @@ class IntegracaoTest {
         profissional.setNome("Médico da Silva");
         profissional.setTelefone("912348765");
         profissional.setEndereco("Casa 123");
-        profissional.setCategoria(["Médico"]);
+        List<String> categorias = new ArrayList<String>();
+        categorias.add("Médico");
+        profissional.setCategoria(categorias);
 
         mockMvc.perform(post("/api/profissionaisDeSaude")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(profissional)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.titulo").value("Almoço de negócios"));
-
+                .andExpect(jsonPath("$.nome").value("Médico da Silva"));
                 
-        Long profissionalId = objectMapper.readTree(
-                profissionalResult.getResponse().getContentAsString()).get("id").asLong();
+        //Long profissionalId = objectMapper.readTree(
+        //        profissionalResult.getResponse().getContentAsString()).get("id").asLong();
 
         // Criar atendimento
         Atendimento atendimento = new Atendimento();
         atendimento.setData(LocalDate.of(2025, 9, 6));
         atendimento.setHorario(LocalTime.of(15, 0));
         atendimento.setProblema_texto("Dor de Cabeça");
-        String[] receitas = [];
-        for (i = 0; i < len(profissional.getCategoria); i++) {
-                switch (profissional.getCategoria()[i]) {
+        List<String> receitas = new ArrayList<String>();
+        for (int i = 0; i < (profissional.getCategoria()).size(); i++) {
+                switch (profissional.getCategoria().get(i)) {
                         case "Psicólogo":
-                                receitas = receitas.append("Atividades Mentais");
+                                receitas.add("Atividades Mentais");
                                 break;
                         case "Fisioterapeuta":
-                                receitas = receitas.append("Atividade Física");
+                                receitas.add("Atividade Física");
                                 break;
                         case "Médico":
-                                receitas = receitas.append("Remédio");
+                                receitas.add("Remédio");
                                 break;
                 }
         }
         atendimento.setReceita_saude(receitas);
-        atendimento.setProfissional(profissionalId);
+        atendimento.setProfissional(profissional);
 
-        MvcResult atendimentoResult = mockMvc.perform(post("/api/atendimentos")
+        mockMvc.perform(post("/api/atendimentos")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(atendimento)))
-                .andExpect(status().isCreated())
-                .andReturn();
+                .andExpect(status().isCreated());
     }
 
     @Test
@@ -138,11 +140,10 @@ class IntegracaoTest {
         atendimento.setHorario(LocalTime.of(15, 0));
         atendimento.setProblema_texto("Dor de Cabeça");
 
-        MvcResult atendimentoResult = mockMvc.perform(post("/api/atendimentos")
+        mockMvc.perform(post("/api/atendimentos")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(atendimento)))
-                .andExpect(status().isCreated())
-                .andReturn();
+                .andExpect(status().isCreated());
 
         // Criar exame
         ExameLab exame = new ExameLab();
@@ -151,7 +152,7 @@ class IntegracaoTest {
 
         mockMvc.perform(post("/api/examesLab")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(profissional)))
+                .content(objectMapper.writeValueAsString(atendimento)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.descricao").value("Exame para dor de cabeça"));
 

@@ -1,15 +1,15 @@
 package com.clinica.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
+//import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import org.hibernate.annotations.Type;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.LocalDateTime;
+//import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "atendimentos")
@@ -31,9 +31,13 @@ public class Atendimento {
     private String problema_texto;
 
     //Receita_Saude[]
-    @Type(org.hibernate.type.StringArrayType.class)
-    @Column(columnDefinition = "text[]")
-    private String[] receita_saude;
+    @ElementCollection
+    @CollectionTable(
+        name = "atendimento_receitas",
+        joinColumns = @JoinColumn(name = "atendimento_id")
+    )
+    @Column(name = "receita_saude")
+    private List<String> receita_saude;
 
     // Ligação com ProfissionalDeSaúde
     @ManyToOne(fetch = FetchType.EAGER)
@@ -41,11 +45,11 @@ public class Atendimento {
     private ProfissionalDeSaude profissional;
 
     //====================----------====================
-	public int getId() {
+	public Long getId() {
 		return this.id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
     //====================----------====================
@@ -85,11 +89,11 @@ public class Atendimento {
 
     
     //====================----------====================
-	public String[] getReceita_saude() {
+	public List<String> getReceita_saude() {
 		return this.receita_saude;
 	}
 
-	public void setReceita_saude(String[] receita_saude) {
+	public void setReceita_saude(List<String> receita_saude) {
 		this.receita_saude = receita_saude;
 	}
     //====================----------====================

@@ -30,7 +30,7 @@ public class ProfissionalDeSaudeController {
     // READ - Listar todos os profissionais
     @GetMapping
     public ResponseEntity<List<ProfissionalDeSaude>> listar() {
-        List<ProfissionalDeSaude> profissionais = repository.findAllByOrderByDataAscHoraAsc();
+        List<ProfissionalDeSaude> profissionais = repository.findAll();
         return ResponseEntity.ok(profissionais);
     }
 
@@ -45,20 +45,26 @@ public class ProfissionalDeSaudeController {
 
     // READ - Buscar profissional por Nome
     @GetMapping("/{nome}")
-    public ResponseEntity<?> buscar(@PathVariable String nome) {
-        return repository.findByNomeContainingIgnoreCase(nome)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(null));
+    public ResponseEntity<?> buscarNome(@PathVariable String nome) {
+        List<ProfissionalDeSaude> profissionais = repository.findByNomeContainingIgnoreCase(nome);
+        if (profissionais.size() > 0) {
+            return ResponseEntity.ok(profissionais);
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 
     // READ - Buscar profissional por Categoria
     @GetMapping("/{categoria}")
-    public ResponseEntity<?> buscar(@PathVariable String categoria) {
-        return repository.findByCategoria(categoria)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(null));
+    public ResponseEntity<?> buscarCategoria(@PathVariable String categoria) {
+        List<ProfissionalDeSaude> profissionais = repository.findByCategoria(categoria);
+        if (profissionais.size() > 0) {
+            return ResponseEntity.ok(profissionais);
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 
     // UPDATE - Atualizar profissional

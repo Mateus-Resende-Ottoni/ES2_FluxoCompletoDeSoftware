@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.LocalDateTime;
+//import java.time.LocalTime;
+//import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/atendimentos")
@@ -33,7 +33,7 @@ public class AtendimentoController {
     // READ - Listar todos os atendimentos
     @GetMapping
     public ResponseEntity<List<Atendimento>> listar() {
-        List<Atendimento> atendimentos = repository.findAllByOrderByDataAscHoraAsc();
+        List<Atendimento> atendimentos = repository.findAllByOrderByDataAscHorarioAsc();
         return ResponseEntity.ok(atendimentos);
     }
 
@@ -48,11 +48,14 @@ public class AtendimentoController {
 
     // READ - Buscar atendimento por data
     @GetMapping("/{data}")
-    public ResponseEntity<?> buscar(@PathVariable LocalDate data) {
-        return repository.findByData(data)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(null));
+    public ResponseEntity<?> buscarData(@PathVariable LocalDate data) {
+        List<Atendimento> atendimentos = repository.findByData(data);
+        if (atendimentos.size() > 0) {
+            return ResponseEntity.ok(atendimentos);
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 
     // UPDATE - Atualizar atendimento

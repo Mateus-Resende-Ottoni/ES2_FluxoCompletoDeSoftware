@@ -1,13 +1,13 @@
-package com.agenda.repository;
+package com.clinica.repository;
 
-import com.agenda.model.Atendimento;
+import com.clinica.model.Atendimento;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;
-import lombok.Data;
+//import lombok.Data;
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.LocalDateTime;
+//import java.time.LocalTime;
+//import java.time.LocalDateTime;
 
 @Repository
 public interface AtendimentoRepository extends JpaRepository<Atendimento, Long> {

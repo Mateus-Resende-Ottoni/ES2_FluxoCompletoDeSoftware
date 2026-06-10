@@ -1,10 +1,11 @@
 package com.clinica.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+//import jakarta.validation.constraints.NotBlank;
+//import jakarta.validation.constraints.NotNull;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 
 @Entity
 @Table(name = "examesLab")
@@ -27,11 +28,11 @@ public class ExameLab {
 
     
     //====================----------====================
-	public int getId() {
+	public Long getId() {
 		return this.id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
     //====================----------====================

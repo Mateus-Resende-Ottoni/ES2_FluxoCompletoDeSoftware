@@ -13,11 +13,11 @@ function App() {
     <Router>
       <div className="App">
         <nav className="navbar">
-          <h1>📅 Agenda Web</h1>
+          <h1> | Clínica Web | </h1>
           <div className="nav-links">
             <Link to="/atendimentos">Atendimentos</Link>
             <Link to="/examesLab">Exames</Link>
-            <Link to="/compromissos">Profissionais</Link>
+            <Link to="/profissionaisDeSaude">Profissionais</Link>
           </div>
         </nav>
 
@@ -30,9 +30,9 @@ function App() {
             <Route path="/examesLab" element={<ExameLabList />} />
             <Route path="/examesLab/novo" element={<ExameLabForm />} />
             <Route path="/examesLab/editar/:id" element={<ExameLabForm />} />
-            <Route path="/compromissos" element={<ProfissionalList />} />
-            <Route path="/compromissos/novo" element={<ProfissionalForm />} />
-            <Route path="/compromissos/editar/:id" element={<ProfissionalForm />} />
+            <Route path="/profissionaisDeSaude" element={<ProfissionalList />} />
+            <Route path="/profissionaisDeSaude/novo" element={<ProfissionalForm />} />
+            <Route path="/profissionaisDeSaude/editar/:id" element={<ProfissionalForm />} />
           </Routes>
         </main>
       </div>

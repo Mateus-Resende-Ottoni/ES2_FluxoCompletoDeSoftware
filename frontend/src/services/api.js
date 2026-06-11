@@ -7,22 +7,31 @@ const api = axios.create({
   headers: { 'Content-Type': 'application/json' }
 });
 
-// ========== CONTATOS (DEV 1 - Ana) ==========
-export const contatoService = {
-  listar: () => api.get('/contatos'),
-  buscar: (id) => api.get(`/contatos/${id}`),
-  criar: (contato) => api.post('/contatos', contato),
-  atualizar: (id, contato) => api.put(`/contatos/${id}`, contato),
-  deletar: (id) => api.delete(`/contatos/${id}`)
+// ========== Atendimentos ==========
+export const atendimentoService = {
+  listar: () => api.get('/atendimentos'),
+  buscar: (id) => api.get(`/atendimentos/${id}`),
+  criar: (atendimento) => api.post('/atendimentos', atendimento),
+  atualizar: (id, atendimento) => api.put(`/atendimentos/${id}`, atendimento),
+  deletar: (id) => api.delete(`/atendimentos/${id}`)
 };
 
-// ========== COMPROMISSOS (DEV 2 - Bruno) ==========
-export const compromissoService = {
-  listar: () => api.get('/compromissos'),
-  buscar: (id) => api.get(`/compromissos/${id}`),
-  criar: (compromisso) => api.post('/compromissos', compromisso),
-  atualizar: (id, compromisso) => api.put(`/compromissos/${id}`, compromisso),
-  deletar: (id) => api.delete(`/compromissos/${id}`)
+// ========== ExamesLab ==========
+export const exameLabService = {
+  listar: () => api.get('/examesLab'),
+  buscar: (id) => api.get(`/examesLab/${id}`),
+  criar: (exameLab) => api.post('/examesLab', exameLab),
+  atualizar: (id, exameLab) => api.put(`/examesLab/${id}`, exameLab),
+  deletar: (id) => api.delete(`/examesLab/${id}`)
+};
+
+// ========== ProfissionaisDeSaude ==========
+export const profissionalService = {
+  listar: () => api.get('/profissionaisDeSaude'),
+  buscar: (id) => api.get(`/profissionaisDeSaude/${id}`),
+  criar: (profissional) => api.post('/profissionaisDeSaude', profissional),
+  atualizar: (id, profissional) => api.put(`/profissionaisDeSaude/${id}`, profissional),
+  deletar: (id) => api.delete(`/profissionaisDeSaude/${id}`)
 };
 
 export default api;

@@ -41,12 +41,12 @@ function ProfissionalDeSaudeForm() {
         </div>
         <div className="form-group">
           <label>Telefone *</label>
-          <input type="time" value={profissional.telefone} required
+          <input type="tel" value={profissional.telefone} required
             onChange={e => setProfissional({...profissional, telefone: e.target.value})} />
         </div>
         <div className="form-group">
           <label>Endereço</label>
-          <input type="time" value={profissional.endereco}
+          <input type="text" value={profissional.endereco}
             onChange={e => setProfissional({...profissional, endereco: e.target.value})} />
         </div>
         <div className="form-group">

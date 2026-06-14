@@ -51,7 +51,6 @@ services:
     branch: main
     rootDir: frontend
     plan: free
-    region: oregon
     buildCommand: npm install && npm run build
     staticPublishPath: build
     envVars:

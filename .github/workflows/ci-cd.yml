@@ -82,7 +82,9 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
 
       - name: 📦 Instalar dependências
-        run: npm ci
+        run: |
+          npm install
+          npm ci
 
       - name: 🧪 Testes unitários React (Jest)
         run: npm test -- --coverage --watchAll=false

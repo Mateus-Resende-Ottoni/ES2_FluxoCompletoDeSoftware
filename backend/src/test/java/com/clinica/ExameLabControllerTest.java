@@ -4,6 +4,7 @@ import com.clinica.controller.ExameLabController;
 import com.clinica.model.ExameLab;
 //import com.clinica.model.Atendimento;
 import com.clinica.repository.ExameLabRepository;
+import com.clinica.repository.AtendimentoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,6 +35,9 @@ class ExameLabControllerTest {
 
     @MockBean
     private ExameLabRepository repository;
+
+    @MockBean
+    private AtendimentoRepository atendimentoRepository;
 
     private ObjectMapper objectMapper;
 

@@ -30,7 +30,7 @@ public class ProfissionalDeSaudeController {
     // READ - Listar todos os profissionais
     @GetMapping
     public ResponseEntity<List<ProfissionalDeSaude>> listar() {
-        List<ProfissionalDeSaude> profissionais = repository.findAll();
+        List<ProfissionalDeSaude> profissionais = repository.findAllByOrderByNomeAsc();
         return ResponseEntity.ok(profissionais);
     }
 
@@ -44,7 +44,7 @@ public class ProfissionalDeSaudeController {
     }
 
     // READ - Buscar profissional por Nome
-    @GetMapping("/{nome}")
+    @GetMapping("/nome/{nome}")
     public ResponseEntity<?> buscarNome(@PathVariable String nome) {
         List<ProfissionalDeSaude> profissionais = repository.findByNomeContainingIgnoreCase(nome);
         if (profissionais.size() > 0) {
@@ -56,7 +56,7 @@ public class ProfissionalDeSaudeController {
     }
 
     // READ - Buscar profissional por Categoria
-    @GetMapping("/{categoria}")
+    @GetMapping("/categoria/{categoria}")
     public ResponseEntity<?> buscarCategoria(@PathVariable String categoria) {
         List<ProfissionalDeSaude> profissionais = repository.findByCategoria(categoria);
         if (profissionais.size() > 0) {

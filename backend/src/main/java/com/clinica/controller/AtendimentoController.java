@@ -47,7 +47,7 @@ public class AtendimentoController {
     }
 
     // READ - Buscar atendimento por data
-    @GetMapping("/{data}")
+    @GetMapping("/data/{data}")
     public ResponseEntity<?> buscarData(@PathVariable LocalDate data) {
         List<Atendimento> atendimentos = repository.findByData(data);
         if (atendimentos.size() > 0) {

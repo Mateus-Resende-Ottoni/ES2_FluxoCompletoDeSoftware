@@ -12,6 +12,13 @@ venv/
 .coverage
 htmlcov/
 .pytest_cache/
+*.class
+test-run.*
+jacoco.exec
+surefire-reports/
+maven-status/
+jacoco/
+node_modules/
 
 # IDE
 .vscode/

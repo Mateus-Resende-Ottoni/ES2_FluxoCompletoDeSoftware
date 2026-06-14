@@ -58,7 +58,7 @@ class IntegracaoTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(atendimento)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.data").value(LocalDate.of(2026, 9, 6)))
+                .andExpect(jsonPath("$.data").value("2026-09-06"))
                 .andReturn();
 
         Long id = objectMapper.readTree(result.getResponse().getContentAsString())
@@ -67,7 +67,7 @@ class IntegracaoTest {
         // 2. BUSCAR atendimento criado
         mockMvc.perform(get("/api/atendimentos/" + id))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data").value(LocalDate.of(2026, 9, 6)));
+                .andExpect(jsonPath("$.data").value("2026-09-06"));
 
         // 3. ATUALIZAR atendimento
         atendimento.setData(LocalDate.of(2026, 9, 7));
@@ -77,7 +77,7 @@ class IntegracaoTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(atendimento)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data").value(LocalDate.of(2026, 9, 7)));
+                .andExpect(jsonPath("$.data").value("2026-09-07"));
 
         // 4. DELETAR atendimento
         mockMvc.perform(delete("/api/atendimentos/" + id))
@@ -152,7 +152,7 @@ class IntegracaoTest {
 
         mockMvc.perform(post("/api/examesLab")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(atendimento)))
+                .content(objectMapper.writeValueAsString(exame)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.descricao").value("Exame para dor de cabeça"));
 

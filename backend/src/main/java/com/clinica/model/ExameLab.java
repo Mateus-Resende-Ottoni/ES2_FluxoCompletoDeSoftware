@@ -22,9 +22,9 @@ public class ExameLab {
     private String descricao;
 
     // Ligação com Atendimento
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "atendimento_id")
-    private Atendimento atendimento;
+	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@JoinColumn(name = "atendimento_id")
+	private Atendimento atendimento;
 
     
     //====================----------====================

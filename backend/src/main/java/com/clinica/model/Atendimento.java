@@ -40,9 +40,9 @@ public class Atendimento {
     private List<String> receita_saude;
 
     // Ligação com ProfissionalDeSaúde
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "profissional_id")
-    private ProfissionalDeSaude profissional;
+	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@JoinColumn(name = "profissional_id")
+	private ProfissionalDeSaude profissional;
 
     //====================----------====================
 	public Long getId() {

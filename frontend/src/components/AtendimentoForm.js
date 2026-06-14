@@ -6,24 +6,36 @@ function AtendimentoForm() {
   const navigate = useNavigate();
   const { id } = useParams();
   const [atendimento, setAtendimento] = useState({
-    data: '', horario: '', problema_texto: '', receita_saude: '', profissional: null
+    data: '', horario: '', problema_texto: '', receita_saude: [], profissional: null
   });
   const [profissionais, setProfissionais] = useState([]);
 
   useEffect(() => {
     profissionalService.listar().then(res => setProfissionais(res.data));
     if (id) {
-      atendimentoService.buscar(id).then(res => setAtendimento(res.data));
+      atendimentoService.buscar(id).then(res => {
+        const a = res.data || {};
+        const normalized = {
+          ...a,
+          receita_saude: Array.isArray(a.receita_saude) ? a.receita_saude : (a.receita_saude ? [a.receita_saude] : []),
+          profissional: a.profissional && a.profissional.id ? a.profissional.id : (typeof a.profissional === 'number' ? a.profissional : null)
+        };
+        setAtendimento(normalized);
+      });
     }
   }, [id]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const payload = {
+        ...atendimento,
+        profissional: atendimento.profissional ? { id: atendimento.profissional } : null
+      };
       if (id) {
-        await atendimentoService.atualizar(id, atendimento);
+        await atendimentoService.atualizar(id, payload);
       } else {
-        await atendimentoService.criar(atendimento);
+        await atendimentoService.criar(payload);
       }
       navigate('/atendimentos');
     } catch (error) {
@@ -51,15 +63,30 @@ function AtendimentoForm() {
             onChange={e => setAtendimento({...atendimento, problema_texto: e.target.value})} />
         </div>
         <div className="form-group">
-          <label>Receita Saúde</label>
-          <textarea value={atendimento.receita_saude} // Mudar esse aqui
-            onChange={e => setAtendimento({...atendimento, receita_saude: e.target.value})} />
+            <label>Receita Saúde</label>
+            <div>
+              {['Atividade Mental', 'Atividade Física', 'Remédio'].map(option => (
+                <label key={option} style={{display: 'block'}}>
+                  <input
+                    type="checkbox"
+                    value={option}
+                    checked={atendimento.receita_saude.includes(option)}
+                    onChange={e => {
+                      const checked = e.target.checked;
+                      const prev = atendimento.receita_saude || [];
+                      const next = checked ? [...prev, option] : prev.filter(x => x !== option);
+                      setAtendimento({...atendimento, receita_saude: next});
+                    }}
+                  /> {option}
+                </label>
+              ))}
+            </div>
         </div>
         <div className="form-group">
           <label>Profissional vinculado</label>
-          <select value={atendimento.profissional?.id || ''}
+          <select value={atendimento.profissional || ''}
             onChange={e => setAtendimento({...atendimento,
-              profissional: e.target.value ? {id: parseInt(e.target.value)} : null})}>
+              profissional: e.target.value ? parseInt(e.target.value) : null})}>
             <option value="">Selecione um profissional</option>
             {profissionais.map(c => (
               <option key={c.id} value={c.id}>{c.nome}</option>

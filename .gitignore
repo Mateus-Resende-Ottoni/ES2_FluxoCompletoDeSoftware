@@ -19,6 +19,7 @@ surefire-reports/
 maven-status/
 jacoco/
 node_modules/
+build/
 
 # IDE
 .vscode/

@@ -56,7 +56,7 @@ function ProfissionalDeSaudeList() {
               <td>{comp.nome}</td>
               <td>{comp.telefone}</td>
               <td>{comp.endereco}</td>
-              <td>{comp.categoria}</td>
+              <td>{Array.isArray(comp.categoria) ? comp.categoria.join(', ') : comp.categoria}</td>
               <td>
                 <Link to={`/profissionaisDeSaude/editar/${comp.id}`} className="btn btn-sm">Editar</Link>
                 <button onClick={() => deletarProfissional(comp.id)} className="btn btn-danger btn-sm">

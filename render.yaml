@@ -50,6 +50,8 @@ services:
     repo: https://github.com/Mateus-Resende-Ottoni/ES2_FluxoCompletoDeSoftware
     branch: main
     rootDir: frontend
+    plan: free
+    region: oregon
     buildCommand: npm install && npm run build
     staticPublishPath: build
     envVars:

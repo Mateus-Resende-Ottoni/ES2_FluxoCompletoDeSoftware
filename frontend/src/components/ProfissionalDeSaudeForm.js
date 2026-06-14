@@ -6,7 +6,7 @@ function ProfissionalDeSaudeForm() {
   const navigate = useNavigate();
   const { id } = useParams();
   const [profissional, setProfissional] = useState({
-    nome: '', telefone: '', endereco: '', categoria: ''
+    nome: '', telefone: '', endereco: '', categoria: []
   });
   const [profissionais, setProfissionais] = useState([]);
 
@@ -50,9 +50,24 @@ function ProfissionalDeSaudeForm() {
             onChange={e => setProfissional({...profissional, endereco: e.target.value})} />
         </div>
         <div className="form-group">
-          <label>Categorias</label>
-          <textarea value={profissional.categoria} // Mudar esse aqui
-            onChange={e => setProfissional({...profissional, categoria: e.target.value})} />
+            <label>Categorias</label>
+            <div>
+              {['Psicólogo', 'Fisioterapeuta', 'Médico'].map(option => (
+                <label key={option} style={{display: 'block'}}>
+                  <input
+                    type="checkbox"
+                    value={option}
+                    checked={profissional.categoria.includes(option)}
+                    onChange={e => {
+                      const checked = e.target.checked;
+                      const prev = profissional.categoria || [];
+                      const next = checked ? [...prev, option] : prev.filter(x => x !== option);
+                      setProfissional({...profissional, categoria: next});
+                    }}
+                  /> {option}
+                </label>
+              ))}
+            </div>
         </div>
         <button type="submit" className="btn btn-primary">Salvar</button>
         <button type="button" className="btn" onClick={() => navigate('/profissionaisDeSaude')}>Cancelar</button>

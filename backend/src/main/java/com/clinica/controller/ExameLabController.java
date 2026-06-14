@@ -1,6 +1,7 @@
 package com.clinica.controller;
 
 import com.clinica.model.ExameLab;
+import com.clinica.repository.AtendimentoRepository;
 import com.clinica.repository.ExameLabRepository;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -15,14 +16,22 @@ import java.util.Map;
 public class ExameLabController {
 
     private final ExameLabRepository repository;
+    private final AtendimentoRepository atendimentoRepository;
 
-    public ExameLabController(ExameLabRepository repository) {
+    public ExameLabController(ExameLabRepository repository,
+                                AtendimentoRepository atendimentoRepository) {
         this.repository = repository;
+        this.atendimentoRepository = atendimentoRepository;
     }
 
     // CREATE - Criar novo exame
     @PostMapping
     public ResponseEntity<ExameLab> criar(@Valid @RequestBody ExameLab exame) {
+        if (exame.getAtendimento() != null && exame.getAtendimento().getId() != null) {
+            atendimentoRepository.findById(exame.getAtendimento().getId())
+                    .ifPresent(exame::setAtendimento);
+        }
+
         ExameLab salvo = repository.save(exame);
         return ResponseEntity.status(HttpStatus.CREATED).body(salvo);
     }
@@ -50,7 +59,12 @@ public class ExameLabController {
         return repository.findById(id)
                 .map(comp -> {
                     comp.setDescricao(dados.getDescricao());
-                    comp.setAtendimento(dados.getAtendimento());
+                    if (dados.getAtendimento() != null && dados.getAtendimento().getId() != null) {
+                        atendimentoRepository.findById(dados.getAtendimento().getId())
+                                .ifPresent(comp::setAtendimento);
+                    } else {
+                        comp.setAtendimento(null);
+                    }
                     return ResponseEntity.ok(repository.save(comp));
                 })
                 .orElse(ResponseEntity.notFound().build());

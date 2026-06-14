@@ -2,6 +2,7 @@ package com.clinica.controller;
 
 import com.clinica.model.Atendimento;
 import com.clinica.repository.AtendimentoRepository;
+import com.clinica.repository.ProfissionalDeSaudeRepository;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,14 +19,22 @@ import java.time.LocalDate;
 public class AtendimentoController {
 
     private final AtendimentoRepository repository;
+    private final ProfissionalDeSaudeRepository profissionalRepository;
 
-    public AtendimentoController(AtendimentoRepository repository) {
+    public AtendimentoController(AtendimentoRepository repository,
+                                 ProfissionalDeSaudeRepository profissionalRepository) {
         this.repository = repository;
+        this.profissionalRepository = profissionalRepository;
     }
 
     // CREATE - Criar novo atendimento
     @PostMapping
     public ResponseEntity<Atendimento> criar(@Valid @RequestBody Atendimento atendimento) {
+        if (atendimento.getProfissional() != null && atendimento.getProfissional().getId() != null) {
+            profissionalRepository.findById(atendimento.getProfissional().getId())
+                    .ifPresent(atendimento::setProfissional);
+        }
+
         Atendimento salvo = repository.save(atendimento);
         return ResponseEntity.status(HttpStatus.CREATED).body(salvo);
     }
@@ -68,7 +77,12 @@ public class AtendimentoController {
                     comp.setHorario(dados.getHorario());
                     comp.setProblema_texto(dados.getProblema_texto());
                     comp.setReceita_saude(dados.getReceita_saude());
-                    comp.setProfissional(dados.getProfissional());
+                    if (dados.getProfissional() != null && dados.getProfissional().getId() != null) {
+                        profissionalRepository.findById(dados.getProfissional().getId())
+                                .ifPresent(comp::setProfissional);
+                    } else {
+                        comp.setProfissional(null);
+                    }
                     return ResponseEntity.ok(repository.save(comp));
                 })
                 .orElse(ResponseEntity.notFound().build());

@@ -57,7 +57,7 @@ function AtendimentoList() {
               <td>{comp.data}</td>
               <td>{comp.horario}</td>
               <td>{comp.problema_texto}</td>
-              <td>{comp.receita_saude}</td>
+              <td>{Array.isArray(comp.receita_saude) ? comp.receita_saude.join(', ') : comp.receita_saude}</td>
               <td>{comp.profissional?.nome || '-'}</td>
               <td>
                 <Link to={`/atendimentos/editar/${comp.id}`} className="btn btn-sm">Editar</Link>

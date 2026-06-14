@@ -38,7 +38,7 @@ function ExameLabList() {
     <div>
       <div className="header">
         <h2>📅 ExamesLab</h2>
-        <Link to="/exames/novo" className="btn btn-primary">+ Novo ExameLab</Link>
+        <Link to="/examesLab/novo" className="btn btn-primary">+ Novo ExameLab</Link>
       </div>
 
       <table className="table">
@@ -52,9 +52,9 @@ function ExameLabList() {
           {exames.map(comp => (
             <tr key={comp.id}>
               <td>{comp.descricao}</td>
-              <td>{comp.atendimento?.data || '-'}:{comp.atendimento?.horario || '-'}</td>
+              <td>{comp.atendimento?.data || '-'} _ {comp.atendimento?.horario || '-'}</td>
               <td>
-                <Link to={`/exames/editar/${comp.id}`} className="btn btn-sm">Editar</Link>
+                <Link to={`/examesLab/editar/${comp.id}`} className="btn btn-sm">Editar</Link>
                 <button onClick={() => deletarExameLab(comp.id)} className="btn btn-danger btn-sm">
                   Excluir
                 </button>
@@ -64,7 +64,7 @@ function ExameLabList() {
         </tbody>
       </table>
 
-      {exames.length === 0 && <p className="empty">Nenhum exameLab cadastrado.</p>}
+      {exames.length === 0 && <p className="empty">Nenhum exame cadastrado.</p>}
     </div>
   );
 }

@@ -13,17 +13,29 @@ function ExameLabForm() {
   useEffect(() => {
     atendimentoService.listar().then(res => setAtendimentos(res.data));
     if (id) {
-      exameLabService.buscar(id).then(res => setExameLab(res.data));
+      //exameLabService.buscar(id).then(res => setExameLab(res.data));
+      exameLabService.buscar(id).then(res => {
+        const a = res.data || {};
+        const normalized = {
+          ...a,
+          atendimento: a.atendimento && a.atendimento.id ? a.atendimento.id : (typeof a.atendimento === 'number' ? a.atendimento : null)
+        };
+        setExameLab(normalized);
+      });
     }
   }, [id]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const payload = {
+        ...exameLab,
+        atendimento: exameLab.atendimento ? { id: exameLab.atendimento } : null
+      };
       if (id) {
-        await exameLabService.atualizar(id, exameLab);
+        await exameLabService.atualizar(id, payload);
       } else {
-        await exameLabService.criar(exameLab);
+        await exameLabService.criar(payload);
       }
       navigate('/examesLab');
     } catch (error) {
@@ -42,9 +54,9 @@ function ExameLabForm() {
         </div>
         <div className="form-group">
           <label>Atendimento vinculado</label>
-          <select value={exameLab.atendimento?.id || ''}
+          <select value={exameLab.atendimento || ''}
             onChange={e => setExameLab({...exameLab,
-              atendimento: e.target.value ? {id: parseInt(e.target.value)} : null})}>
+              atendimento: e.target.value ? parseInt(e.target.value) : null})}>
             <option value="">Selecione um atendimento</option>
             {atendimentos.map(c => (
               <option key={c.id} value={c.id}>{c.data}-{c.horario}</option>

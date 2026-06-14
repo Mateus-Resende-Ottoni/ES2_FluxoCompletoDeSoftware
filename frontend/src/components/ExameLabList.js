@@ -13,7 +13,7 @@ function ExameLabList() {
   const carregarExamesLab = async () => {
     try {
       const response = await exameLabService.listar();
-      setExamesLab(response.data);
+      setExamesLab(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error('Erro ao carregar exames:', error);
     } finally {
@@ -49,7 +49,7 @@ function ExameLabList() {
           </tr>
         </thead>
         <tbody>
-          {exames.map(comp => (
+          {Array.isArray(exames) && exames.map(comp => (
             <tr key={comp.id}>
               <td>{comp.descricao}</td>
               <td>{comp.atendimento?.data || '-'} _ {comp.atendimento?.horario || '-'}</td>

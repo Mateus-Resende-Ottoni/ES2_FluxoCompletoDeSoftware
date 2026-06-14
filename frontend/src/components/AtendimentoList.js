@@ -13,7 +13,7 @@ function AtendimentoList() {
   const carregarAtendimentos = async () => {
     try {
       const response = await atendimentoService.listar();
-      setAtendimentos(response.data);
+      setAtendimentos(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error('Erro ao carregar atendimentos:', error);
     } finally {
@@ -52,7 +52,7 @@ function AtendimentoList() {
           </tr>
         </thead>
         <tbody>
-          {atendimentos.map(comp => (
+          {Array.isArray(atendimentos) && atendimentos.map(comp => (
             <tr key={comp.id}>
               <td>{comp.data}</td>
               <td>{comp.horario}</td>

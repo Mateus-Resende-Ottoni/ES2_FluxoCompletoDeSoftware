@@ -13,7 +13,7 @@ function ProfissionalDeSaudeList() {
   const carregarProfissionais = async () => {
     try {
       const response = await profissionalService.listar();
-      setProfissionais(response.data);
+      setProfissionais(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error('Erro ao carregar profissionais:', error);
     } finally {
@@ -51,7 +51,7 @@ function ProfissionalDeSaudeList() {
           </tr>
         </thead>
         <tbody>
-          {profissionais.map(comp => (
+          {Array.isArray(profissionais) && profissionais.map(comp => (
             <tr key={comp.id}>
               <td>{comp.nome}</td>
               <td>{comp.telefone}</td>

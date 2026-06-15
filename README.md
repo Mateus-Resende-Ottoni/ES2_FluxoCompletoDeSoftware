@@ -1,9 +1,11 @@
 # ES2_FluxoCompletoDeSoftware
 Esse repositório é dedicado à atividade avaliativa da disciplina Engenharia de Software 2, centrada em recriar o processo de desenvolvimento de software do começo ao fim, desde o desenvolvimento de código até versionamento e automatização de testes, criando uma interface front-end que acessa um back-end com banco de dados completamente funcional.
 
-# Agenda Web - Material Educacional
+Uma versão funcional do site está disponível [aqui](https://clinica-frontend-pb5y.onrender.com/) até 14/07/2026: 
 
-Sistema de Agenda Web para demonstração do ciclo completo de desenvolvimento de software.
+# Clínica Web - Material Educacional
+
+Sistema de Clínica Web para demonstração do ciclo completo de desenvolvimento de software.
 
 ## Tecnologias
 
@@ -15,9 +17,8 @@ Sistema de Agenda Web para demonstração do ciclo completo de desenvolvimento d
 | Build Backend | Maven |
 | Build Frontend | Node.js 20 + npm |
 | Versionamento | Git + GitHub |
-| CI/CD | GitHub Actions |
 | Containers | Docker + Docker Compose |
-| Produção | AWS (ECS + RDS + ECR + ALB) |
+| Produção | Render |
 
 ## Estrutura do Projeto
 
@@ -31,9 +32,7 @@ agenda-web/
 │   ├── package.json
 │   ├── Dockerfile
 │   └── src/
-├── docker-compose.yml
-├── .github/workflows/ci-cd.yml
-└── apresentacao_completa.html  # Apresentação da aula
+└── docker-compose.yml
 ```
 
 ## Como Executar (Desenvolvimento)
@@ -57,12 +56,3 @@ mvn test
 cd frontend
 npm test
 ```
-
-## Divisão de Trabalho
-
-- **DEV 1 - Ana:** CRUD de Contatos (ContatoController + ContatoList/Form)
-- **DEV 2 - Bruno:** CRUD de Compromissos (CompromissoController + CompromissoList/Form)
-
-## Apresentação
-
-Abra o arquivo `apresentacao_completa.html` no navegador para ver a apresentação completa da aula.

@@ -5,6 +5,10 @@ import { profissionalService } from '../services/api';
 function ProfissionalDeSaudeList() {
   const [profissionais, setProfissionais] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showNameFilter, setShowNameFilter] = useState(false);
+  const [nameFilter, setNameFilter] = useState('');
+  const [showCategoryFilter, setShowCategoryFilter] = useState(false);
+  const [categoryFilter, setCategoryFilter] = useState([]);
 
   useEffect(() => {
     carregarProfissionais();
@@ -34,24 +38,79 @@ function ProfissionalDeSaudeList() {
 
   if (loading) return <p>Carregando...</p>;
 
+  const categories = ['Psicólogo', 'Fisioterapeuta', 'Médico'];
+
+  const aplicarFiltros = (list) => {
+    return list.filter(p => {
+      const nomeOk = nameFilter.trim() === '' || (p.nome || '').toLowerCase().includes(nameFilter.trim().toLowerCase());
+      const categoria = p.categoria || [];
+      const categoriasArray = Array.isArray(categoria) ? categoria : [categoria];
+      const categoriaOk = categoryFilter.length === 0 || categoriasArray.some(c => categoryFilter.includes(c));
+      return nomeOk && categoriaOk;
+    });
+  };
+
+  const displayed = aplicarFiltros(Array.isArray(profissionais) ? profissionais : []);
+
   return (
     <div>
       <div className="header">
-        <h2>📅 Profissionais</h2>
+        <h2>Profissionais</h2>
         <Link to="/profissionaisDeSaude/novo" className="btn btn-primary">+ Novo Profissional</Link>
       </div>
 
       <table className="table">
         <thead>
           <tr>
-            <th>Nome</th>
+            <th>
+              <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
+                <span>Nome</span>
+                <button type="button" className="btn btn-sm" onClick={() => setShowNameFilter(s => !s)}>🔎</button>
+              </div>
+              {showNameFilter && (
+                <div style={{marginTop: 6}}>
+                  <input
+                    type="text"
+                    placeholder="Pesquisar nome..."
+                    value={nameFilter}
+                    onChange={e => setNameFilter(e.target.value)}
+                  />
+                  <button type="button" className="btn btn-sm" onClick={() => setNameFilter('')}>Limpar</button>
+                </div>
+              )}
+            </th>
             <th>Telefone</th>
             <th>Endereço</th>
-            <th>Categoria</th>
+            <th>
+              <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
+                <span>Categoria</span>
+                <button type="button" className="btn btn-sm" onClick={() => setShowCategoryFilter(s => !s)}>🔎</button>
+              </div>
+              {showCategoryFilter && (
+                <div style={{marginTop: 6}}>
+                  {categories.map(option => (
+                    <label key={option} style={{display: 'block'}}>
+                      <input
+                        type="checkbox"
+                        value={option}
+                        checked={categoryFilter.includes(option)}
+                        onChange={e => {
+                          const checked = e.target.checked;
+                          setCategoryFilter(prev => checked ? [...prev, option] : prev.filter(x => x !== option));
+                        }}
+                      /> {option}
+                    </label>
+                  ))}
+                  <div style={{marginTop:6}}>
+                    <button type="button" className="btn btn-sm" onClick={() => setCategoryFilter([])}>Limpar</button>
+                  </div>
+                </div>
+              )}
+            </th>
           </tr>
         </thead>
         <tbody>
-          {Array.isArray(profissionais) && profissionais.map(comp => (
+          {displayed.map(comp => (
             <tr key={comp.id}>
               <td>{comp.nome}</td>
               <td>{comp.telefone}</td>

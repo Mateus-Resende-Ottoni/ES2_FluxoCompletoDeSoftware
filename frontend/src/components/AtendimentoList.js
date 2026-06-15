@@ -5,6 +5,8 @@ import { atendimentoService } from '../services/api';
 function AtendimentoList() {
   const [atendimentos, setAtendimentos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showDateFilter, setShowDateFilter] = useState(false);
+  const [dateFilter, setDateFilter] = useState('');
 
   useEffect(() => {
     carregarAtendimentos();
@@ -34,17 +36,38 @@ function AtendimentoList() {
 
   if (loading) return <p>Carregando...</p>;
 
+  const aplicarFiltros = (list) => {
+    return list.filter(a => {
+      if (!dateFilter) return true;
+      const itemDate = (a.data || '').split('T')[0];
+      return itemDate === dateFilter;
+    });
+  };
+
+  const displayed = aplicarFiltros(Array.isArray(atendimentos) ? atendimentos : []);
+
   return (
     <div>
       <div className="header">
-        <h2>📅 Atendimentos</h2>
+        <h2>Atendimentos</h2>
         <Link to="/atendimentos/novo" className="btn btn-primary">+ Novo Atendimento</Link>
       </div>
 
       <table className="table">
         <thead>
           <tr>
-            <th>Data</th>
+            <th>
+              <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
+                <span>Data</span>
+                <button type="button" className="btn btn-sm" onClick={() => setShowDateFilter(s => !s)}>🔎</button>
+              </div>
+              {showDateFilter && (
+                <div style={{marginTop:6}}>
+                  <input type="date" value={dateFilter} onChange={e => setDateFilter(e.target.value)} />
+                  <button type="button" className="btn btn-sm" onClick={() => setDateFilter('')}>Limpar</button>
+                </div>
+              )}
+            </th>
             <th>Horário</th>
             <th>Problema</th>
             <th>Receita</th>
@@ -52,7 +75,7 @@ function AtendimentoList() {
           </tr>
         </thead>
         <tbody>
-          {Array.isArray(atendimentos) && atendimentos.map(comp => (
+          {displayed.map(comp => (
             <tr key={comp.id}>
               <td>{comp.data}</td>
               <td>{comp.horario}</td>

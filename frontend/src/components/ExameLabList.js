@@ -37,7 +37,7 @@ function ExameLabList() {
   return (
     <div>
       <div className="header">
-        <h2>📅 ExamesLab</h2>
+        <h2>Exames</h2>
         <Link to="/examesLab/novo" className="btn btn-primary">+ Novo ExameLab</Link>
       </div>
 

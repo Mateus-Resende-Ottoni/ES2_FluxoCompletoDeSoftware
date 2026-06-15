@@ -9,9 +9,9 @@ services:
     environment:
       - DB_HOST=postgres
       - DB_PORT=5432
-      - DB_NAME=clinica_db_zbds
-      - DB_USER=postgres
-      - DB_PASSWORD=postgres
+      - DB_NAME=clinica_db
+      - DB_USER=postgres1
+      - DB_PASSWORD=postgres1
     depends_on:
       postgres:
         condition: service_healthy
@@ -28,9 +28,9 @@ services:
   postgres:
     image: postgres:15
     environment:
-      POSTGRES_DB: clinica_db_zbds
+      POSTGRES_DB: clinica_db
       POSTGRES_USER: postgres1
-      POSTGRES_PASSWORD: dNMcwotdSgKLQj3jnSm7M5V45Pa9Op4I
+      POSTGRES_PASSWORD: postgres1
     ports:
       - "5432:5432"
     volumes:

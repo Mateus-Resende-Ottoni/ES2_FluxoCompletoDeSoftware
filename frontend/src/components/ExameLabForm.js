@@ -11,7 +11,7 @@ function ExameLabForm() {
   const [atendimentos, setAtendimentos] = useState([]);
 
   useEffect(() => {
-    atendimentoService.listar().then(res => setAtendimentos(res.data));
+    atendimentoService.listar().then(res => setAtendimentos(Array.isArray(res.data) ? res.data : []));
     if (id) {
       //exameLabService.buscar(id).then(res => setExameLab(res.data));
       exameLabService.buscar(id).then(res => {
@@ -58,9 +58,13 @@ function ExameLabForm() {
             onChange={e => setExameLab({...exameLab,
               atendimento: e.target.value ? parseInt(e.target.value) : null})}>
             <option value="">Selecione um atendimento</option>
-            {atendimentos.map(c => (
-              <option key={c.id} value={c.id}>{c.data}-{c.horario}</option>
-            ))}
+            {atendimentos.length > 0 ? (
+              atendimentos.map(c => (
+                <option key={c.id} value={c.id}>{c.data} _ {c.horario}</option>
+              ))
+            ) : (
+              <option value="" disabled>Nenhum atendimento cadastrado</option>
+            )}
           </select>
         </div>
         <button type="submit" className="btn btn-primary">Salvar</button>

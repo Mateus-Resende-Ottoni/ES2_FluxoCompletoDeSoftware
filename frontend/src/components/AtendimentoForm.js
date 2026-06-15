@@ -11,7 +11,7 @@ function AtendimentoForm() {
   const [profissionais, setProfissionais] = useState([]);
 
   useEffect(() => {
-    profissionalService.listar().then(res => setProfissionais(res.data));
+    profissionalService.listar().then(res => setProfissionais(Array.isArray(res.data) ? res.data : []));
     if (id) {
       atendimentoService.buscar(id).then(res => {
         const a = res.data || {};
@@ -88,9 +88,13 @@ function AtendimentoForm() {
             onChange={e => setAtendimento({...atendimento,
               profissional: e.target.value ? parseInt(e.target.value) : null})}>
             <option value="">Selecione um profissional</option>
-            {profissionais.map(c => (
-              <option key={c.id} value={c.id}>{c.nome}</option>
-            ))}
+            {profissionais.length > 0 ? (
+              profissionais.map(c => (
+                <option key={c.id} value={c.id}>{c.nome}</option>
+              ))
+            ) : (
+              <option value="" disabled>Nenhum profissional cadastrado</option>
+            )}
           </select>
         </div>
         <button type="submit" className="btn btn-primary">Salvar</button>

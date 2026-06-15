@@ -14,7 +14,7 @@ services:
     name: clinica-backend
     runtime: docker
     repo: https://github.com/Mateus-Resende-Ottoni/ES2_FluxoCompletoDeSoftware
-    branch: main
+    branch: render
     rootDir: backend
     dockerfilePath: ./Dockerfile
     dockerContext: .
@@ -48,7 +48,7 @@ services:
     name: clinica-frontend
     runtime: static
     repo: https://github.com/Mateus-Resende-Ottoni/ES2_FluxoCompletoDeSoftware
-    branch: main
+    branch: render
     rootDir: frontend
     buildCommand: npm install && npm run build
     staticPublishPath: build

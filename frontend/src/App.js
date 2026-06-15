@@ -13,7 +13,7 @@ function App() {
     <Router>
       <div className="App">
         <nav className="navbar">
-          <h1> | Clínica Web | </h1>
+          <h1> Clínica Web </h1>
           <div className="nav-links">
             <Link to="/atendimentos">Atendimentos</Link>
             <Link to="/examesLab">Exames</Link>
